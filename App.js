@@ -1,5 +1,6 @@
+import { setStatusBarBackgroundColor } from 'expo-status-bar';
 import React, { useRef, useState } from 'react';
-import { Dimensions, PanResponder, View, StyleSheet } from 'react-native';
+import { Dimensions, PanResponder, View, StyleSheet, Button } from 'react-native';
 import Svg, { Polyline } from 'react-native-svg';
 
 const examplePath = [
@@ -10,17 +11,16 @@ const examplePath = [
   { x: 285, y: 130 },
   { x: 90, y: 298 }
 ];
-
-const GesturePath = ({ path, color }) => {
+const GesturePath = ({ path, color, strokeWidth }) => {
   const { width, height } = Dimensions.get('window');
   const points = path.map(p => `${p.x},${p.y}`).join(' ');
   return (
-    <Svg height="100%" width="100%" viewBox={`0 0 ${width} ${height}`}>
+    <Svg height="90%" width="100%" viewBox={`0 0 ${width} ${height}`}>
       <Polyline
         points={points}
         fill="none"
         stroke={color}
-        strokeWidth="1"
+        strokeWidth={strokeWidth}
       />
     </Svg>    
   );
@@ -54,10 +54,14 @@ const GestureRecorder = ({ onPathChanged }) => {
 
 const App = () => {
   const [path, setPath] = useState(examplePath);
+  const [color, setColor] = useState('green');
+  const [strokeWidth, setStrokeWidth] = useState('1');
   return (
     <View style={StyleSheet.absoluteFill}>
-      <GesturePath path={path} color="green" />
+      <GesturePath path={path} color={color} strokeWidth={strokeWidth} />
       <GestureRecorder onPathChanged={setPath} />
+      <Button title='red' onPress={() => setColor("red")}></Button>
+      <Button title='1.5' onPress={() => setStrokeWidth("1.5")}></Button>
     </View>
   );
 }
